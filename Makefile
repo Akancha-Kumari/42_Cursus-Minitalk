@@ -1,35 +1,46 @@
-CC = cc
-CFLAGS = ${CC} -Wall -Wextra -Werror
+# Executable Names
+NAME_SERVER = server
+NAME_CLIENT = client
 
-SERVER = server
-CLIENT = client
+# Compiler and Flags
+CC         = cc
+CFLAGS     = -Wall -Wextra -Werror
+
+# Source Files
 SRCS_SERVER = server.c
-SRCS_CLIENT = client.c
-SRCS_UTILS = client_utils.c
+SRCS_CLIENT = client.c client_utils.c
 
+# Object Files
 OBJS_SERVER = $(SRCS_SERVER:.c=.o)
 OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
-OBJS_UTILS  = $(SRCS_UTILS:.c=.o)
 
-RM = rm -rf
+# Default rule (compile both server and client)
+all: $(NAME_SERVER) $(NAME_CLIENT)
 
-all: $(SERVER) $(CLIENT)
+# Compile server
+$(NAME_SERVER): $(OBJS_SERVER)
+	$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJS_SERVER)
 
-$(SERVER) $(CLIENT): $(OBJS_SERVER) $(OBJS_CLIENT) $(OBJS_UTILS)
-	${CCFLAGS} ${OBJS_SERVER} -o ${SERVER}
-	${CCFLAGS} ${OBJS_CLIENT} $(OBJS_UTILS) -o ${CLIENT}
+# Compile client
+$(NAME_CLIENT): $(OBJS_CLIENT)
+	$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJS_CLIENT)
 
+# Compile .c files to .o files
 %.o: %.c
-	$(CCFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
+# Clean object files
 clean:
-	$(MAKE) clean
-	$(RM) $(OBJS_SERVER) $(OBJS_CLIENT) $(OBJS_UTILS)
+	rm -f $(OBJS_SERVER) $(OBJS_CLIENT)
 
+# Clean everything including binaries
 fclean: clean
-	$(MAKE) fclean
-	$(RM) $(SERVER) $(CLIENT)
+	rm -f $(NAME_SERVER) $(NAME_CLIENT)
 
+# Recompile everything
 re: fclean all
 
+# Phony Targets
 .PHONY: all clean fclean re
+
+
