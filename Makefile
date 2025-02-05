@@ -1,46 +1,44 @@
-# Executable Names
+
 NAME_SERVER = server
 NAME_CLIENT = client
 
-# Compiler and Flags
 CC         = cc
 CFLAGS     = -Wall -Wextra -Werror
 
-# Source Files
-SRCS_SERVER = server.c
-SRCS_CLIENT = client.c client_utils.c
+SRC_DIR = src
+PRINTF_DIR = ft_printf
 
-# Object Files
+SRCS_SERVER = $(SRC_DIR)/server.c 
+SRCS_CLIENT = $(SRC_DIR)/client.c $(SRC_DIR)/client_utils.c
+
 OBJS_SERVER = $(SRCS_SERVER:.c=.o)
 OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
 
-# Default rule (compile both server and client)
-all: $(NAME_SERVER) $(NAME_CLIENT)
+PRINTF = $(PRINTF_DIR)/libftprintf.a
 
-# Compile server
+all: $(PRINTF) $(NAME_SERVER) $(NAME_CLIENT)
+
+$(PRINTF):
+	make -C $(PRINTF_DIR)
+
 $(NAME_SERVER): $(OBJS_SERVER)
-	$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJS_SERVER)
+	$(CC) $(CFLAGS) $(OBJS_SERVER) $(PRINTF) -o $(NAME_SERVER)
 
-# Compile client
+
 $(NAME_CLIENT): $(OBJS_CLIENT)
-	$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJS_CLIENT)
+	$(CC) $(CFLAGS) $(OBJS_CLIENT) $(PRINTF) -o $(NAME_CLIENT)
 
-# Compile .c files to .o files
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean object files
 clean:
+	make clean -C $(PRINTF_DIR)
 	rm -f $(OBJS_SERVER) $(OBJS_CLIENT)
 
-# Clean everything including binaries
-fclean: clean
-	rm -f $(NAME_SERVER) $(NAME_CLIENT)
 
-# Recompile everything
+fclean: clean
+	make fclean -C $(PRINTF_DIR)
+	rm -f $(NAME_SERVER) $(NAME_CLIENT) $(PRINTF)
+
 re: fclean all
 
-# Phony Targets
 .PHONY: all clean fclean re
-
 
