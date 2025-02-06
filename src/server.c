@@ -30,7 +30,7 @@ void	signal_handler(int signal, siginfo_t *info, void *context)
 		{
 			ft_printf("\n");
 			kill(info->si_pid, SIGUSR1);
-			return;
+			return ;
 		}
 		else
 			ft_printf("%c", ch);

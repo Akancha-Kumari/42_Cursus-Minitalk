@@ -14,21 +14,22 @@
 
 volatile sig_atomic_t	g_acknowledgment_received = 0;
 
-int send_char_to_bit(int pid, char ch)
+int	send_char_to_bit(int pid, char ch)
 {
-    int bit = 7;
-	
-    while (bit >= 0)
-    {
-        if ((ch >> bit) & 1)
-            kill(pid, SIGUSR1);
-        else
-            kill(pid, SIGUSR2);
+	int	bit;
+
+	bit = 7;
+	while (bit >= 0)
+	{
+		if ((ch >> bit) & 1)
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
 		while (!g_acknowledgment_received)
 			usleep(200);
 		g_acknowledgment_received = 0;
-        bit--;
-    }
+		bit--;
+	}
 	return (0);
 }
 
@@ -51,14 +52,14 @@ void	signal_handle(int signo, siginfo_t *info, void *context)
 		i++;
 }
 
-int test_pid_server_connection(int pid)
+int	test_pid_server_connection(int pid)
 {
-	if (kill(pid, 0) == -1) 
-	{ 
+	if (kill(pid, 0) == -1)
+	{
 		printf("Error: No server found with PID %d.\n", pid);
-		return (0); 
-    }
-    return (1);
+		return (0);
+	}
+	return (1);
 }
 
 static int	check_valid_pid(char *argv[])
@@ -87,9 +88,9 @@ static int	check_valid_pid(char *argv[])
 
 int	main(int argc, char *argv[])
 {
-	struct sigaction sa;
-	int pid;
-	int i;
+	struct sigaction	sa;
+	int					pid;
+	int					i;
 
 	if (argc != 3)
 	{
@@ -98,16 +99,16 @@ int	main(int argc, char *argv[])
 	}
 	i = 0;
 	pid = check_valid_pid(argv);
-	if(pid == -1)
+	if (pid == -1)
 		return (1);
 	if (!test_pid_server_connection(pid))
-        return (1);
+		return (1);
 	setup_signal(&sa);
 	while (argv[2][i] != '\0')
-    {
-        send_char_to_bit(pid, argv[2][i]);
-        i++;
-    }
-    send_char_to_bit(pid, '\0');
+	{
+		send_char_to_bit(pid, argv[2][i]);
+		i++;
+	}
+	send_char_to_bit(pid, '\0');
 	return (0);
 }

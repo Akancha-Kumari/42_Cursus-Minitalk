@@ -6,7 +6,7 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:25:52 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/05 15:41:47 by akumari          ###   ########.fr       */
+/*   Updated: 2025/02/06 10:48:43 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_atoi(const char *str)
 	return (sign * result);
 }
 
-void setup_signal(struct sigaction *sa)
+void	setup_signal(struct sigaction *sa)
 {
 	sigemptyset(&sa->sa_mask);
 	sa->sa_flags = SA_RESTART;

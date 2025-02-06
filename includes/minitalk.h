@@ -14,14 +14,14 @@
 # define MINITALK_H
 
 # define _GNU_SOURCE
+# include "../ft_printf/ft_printf.h"
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-#include "../ft_printf/ft_printf.h"
 
-int	ft_atoi(const char *str);
+int		ft_atoi(const char *str);
 void	signal_handle(int signo, siginfo_t *info, void *context);
-void setup_signal(struct sigaction *sa);
+void	setup_signal(struct sigaction *sa);
 
 #endif
